@@ -19,9 +19,10 @@ export interface Props {
   children: ReactNode,
   title?: ReactNode,
   footer?: ReactNode,
-  renderHandler?: ({setIsActive , isActive}: handlerProps) => ReactNode 
+  renderHandler?: ({setIsActive , isActive}: handlerProps) => ReactNode,
+  onClose?: () => void
 }
-const Modal = ({children, title, footer, renderHandler}: Props) => {
+const Modal = ({children, title, footer, renderHandler, onClose}: Props) => {
   const [isActive, setIsActive] = useState(false)
   const element = useRef(document.createElement('div'))
   useEffect(() => {
@@ -34,7 +35,13 @@ const Modal = ({children, title, footer, renderHandler}: Props) => {
   }, [])
   return <>
     {renderHandler?.({setIsActive, isActive})}
-    {isActive && createPortal(<ModalContent  title={title} footer={footer} handleClose={() => setIsActive(false)}>{children}</ModalContent>, element.current)}
+    {isActive && createPortal(<ModalContent
+      title={title}
+      footer={footer}
+      handleClose={() => {
+        setIsActive(false)
+        onClose?.()
+      }}>{children}</ModalContent>, element.current)}
   </>
 }
 
