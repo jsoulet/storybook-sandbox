@@ -32,7 +32,7 @@ jobs:
         run: yarn build
       
       - name: Deploy to AWS
-        uses: jakejarvis/s3-sync-action
+        uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-simlinks --delete
         env: 
