@@ -29,4 +29,4 @@ jobs:
     - name: Installing dependancies
       run: yarn install --frozen-lockfile
     - name: Testing
-    - run: yarn test
+      run: yarn test
