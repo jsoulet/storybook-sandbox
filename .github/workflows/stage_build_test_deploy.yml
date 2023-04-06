@@ -49,5 +49,5 @@ jobs:
         with:
           message: |
             Your Storybook preview is ready at 
-            https://${{ secrets.AWS_S3_BUCKET }}.s3.${{ secrets.AWS_S3_REGION }}.amazonaws.com/${{ github.head.ref }}/index.html
+            https://${{ secrets.AWS_S3_BUCKET }}.s3.${{ secrets.AWS_S3_REGION }}.amazonaws.com/${{ github.head_ref }}/index.html
           
