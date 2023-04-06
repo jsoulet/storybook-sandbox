@@ -39,7 +39,13 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-west-3'   # Paris
+          AWS_REGION: ${{ secrets.AWS_S3_REGION }}
           SOURCE_DIR: 'storybook-static'
           DEST_DIR: $GITHUB_HEAD_REF
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Your Storybook preview is ready at 
+            https://${{ secrets.AWS_S3_BUCKET }}.s3.${{ secrets.AWS_S3_REGION }}.amazonaws.com/${{ github.head.ref }}/index.html
           
