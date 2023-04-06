@@ -5,7 +5,8 @@
   "description": "",
   "scripts": {
     "test": "jest",
-    "start": "start-storybook -p 6006"
+    "start": "start-storybook -p 6006",
+    "build": "build-storybook"
   },
   "dependencies": {
     "@jest/globals": "^29.3.1",

@@ -1,0 +1,53 @@
+name: Test, build and deploy stage
+
+on:
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          
+      - name: Installing dependancies
+        run: yarn install --frozen-lockfile
+      
+      - name: Testing
+        run: yarn test
+      
+      - name: Build Storybok
+        run: yarn build
+      
+      - name: Deploy to AWS
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env: 
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_S3_REGION }}
+          SOURCE_DIR: 'storybook-static'
+          DEST_DIR: $GITHUB_HEAD_REF
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Your Storybook preview is ready at 
+            https://${{ secrets.AWS_S3_BUCKET }}.s3.${{ secrets.AWS_S3_REGION }}.amazonaws.com/${{ github.head_ref }}/index.html
+          
